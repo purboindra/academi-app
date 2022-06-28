@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "648768465871",
+    "project_id": "academi-app",
+    "storage_bucket": "academi-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648768465871:android:b712e5fe977cc69faf00ba",
+        "android_client_info": {
+          "package_name": "com.purboindra.academiapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648768465871-d6f0uukdruh2igno54fsp370s1k3me1g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRHnl7muCqI6L724V3WQl0HDTtExuazJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648768465871-d6f0uukdruh2igno54fsp370s1k3me1g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "648768465871-qtpm4il4il9fl1riqb9uotk15v4hd6ge.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.purboindra.academiapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

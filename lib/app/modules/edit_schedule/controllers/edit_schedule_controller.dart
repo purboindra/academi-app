@@ -37,9 +37,9 @@ class EditScheduleController extends GetxController {
 
   final addScheduleC = Get.find<AddScheduleController>();
 
-  var startTime = DateFormat("hh:mm:a").format(DateTime.now()).obs;
+  var startTime = DateFormat("hh:mm a").format(DateTime.now()).obs;
 
-  var endTime = DateFormat("hh:mm:a").format(DateTime.now()).obs;
+  var endTime = DateFormat("hh:mm a").format(DateTime.now()).obs;
 
   Future getDateFromUser(BuildContext context) async {
     pickerDate = await showDatePicker(
@@ -70,11 +70,13 @@ class EditScheduleController extends GetxController {
       initialEntryMode: TimePickerEntryMode.input,
     );
 
-    var timeData = timeOfDay!.format(context).obs;
-    if (isStartedTime == true) {
-      startTime.value = timeData.value;
-    } else {
-      endTime.value = timeData.value;
+    if (timeOfDay != null) {
+      var timeData = timeOfDay.format(context).obs;
+      if (isStartedTime == true) {
+        startTime.value = timeData.value;
+      } else {
+        endTime.value = timeData.value;
+      }
     }
   }
 
@@ -82,9 +84,9 @@ class EditScheduleController extends GetxController {
     try {
       CollectionReference users = firestore.collection("users");
 
-      final dataS = users.doc(email).collection("schedule").doc(id).get();
+      final data = users.doc(email).collection("schedule").doc(id).get();
 
-      dataS.then(
+      data.then(
         (value) {
           var startTime = value.data()!["startTime"];
 
@@ -131,21 +133,21 @@ class EditScheduleController extends GetxController {
     }
   }
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> editScheduleStream(
-      String email, id) {
-    try {
-      final index =
-          firestore.collection("users").doc(email).collection("schedule").doc();
+  // Stream<DocumentSnapshot<Map<String, dynamic>>> editScheduleStream(
+  //     String email, id) {
+  //   try {
+  //     final index =
+  //         firestore.collection("users").doc(email).collection("schedule").doc();
 
-      return firestore
-          .collection('users')
-          .doc(email)
-          .collection("schedule")
-          .doc(index.id)
-          .snapshots();
-    } catch (e) {
-      print(e);
-      rethrow;
-    }
-  }
+  //     return firestore
+  //         .collection('users')
+  //         .doc(email)
+  //         .collection("schedule")
+  //         .doc(index.id)
+  //         .snapshots();
+  //   } catch (e) {
+  //     print(e);
+  //     rethrow;
+  //   }
+  // }
 }

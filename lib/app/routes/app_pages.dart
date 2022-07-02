@@ -2,6 +2,10 @@ import 'package:get/get.dart';
 
 import '../modules/add_schedule/bindings/add_schedule_binding.dart';
 import '../modules/add_schedule/views/add_schedule_view.dart';
+import '../modules/all_schedule/bindings/all_schedule_binding.dart';
+import '../modules/all_schedule/views/all_schedule_view.dart';
+import '../modules/coba/bindings/coba_binding.dart';
+import '../modules/coba/views/coba_view.dart';
 import '../modules/detail_schedule/bindings/detail_schedule_binding.dart';
 import '../modules/detail_schedule/views/detail_schedule_view.dart';
 import '../modules/edit_schedule/bindings/edit_schedule_binding.dart';
@@ -16,6 +20,14 @@ import '../modules/main/views/main_view.dart';
 part 'app_routes.dart';
 
 class AppPages {
+  // static String routesAddSchedule(int pageId, String page) {
+  //   return "${Routes.ADD_SCHEDULE}?pageId=${pageId}&page=$page";
+  // }
+
+  // static String routesMain(int pageId, String page) {
+  //   return "${Routes.MAIN}?pageId=${pageId}&page=$page";
+  // }
+
   AppPages._();
 
   static const INITIAL = Routes.HOME;
@@ -28,7 +40,9 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ADD_SCHEDULE,
-      page: () => AddScheduleView(),
+      page: () {
+        return AddScheduleView();
+      },
       binding: AddScheduleBinding(),
       transition: Transition.topLevel,
     ),
@@ -40,7 +54,9 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () => MainView(),
+      page: () {
+        return MainView();
+      },
       binding: MainBinding(),
       transition: Transition.topLevel,
     ),
@@ -55,6 +71,16 @@ class AppPages {
       page: () => EditScheduleView(),
       binding: EditScheduleBinding(),
       transition: Transition.topLevel,
+    ),
+    GetPage(
+      name: _Paths.ALL_SCHEDULE,
+      page: () => AllScheduleView(),
+      binding: AllScheduleBinding(),
+    ),
+    GetPage(
+      name: _Paths.COBA,
+      page: () => CobaView(),
+      binding: CobaBinding(),
     ),
   ];
 }

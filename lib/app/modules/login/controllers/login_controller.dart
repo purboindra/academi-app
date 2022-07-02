@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:academiapp/app/model/user_model.dart';
 import 'package:academiapp/app/routes/app_pages.dart';
+import 'package:academiapp/app/utils/app_constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -16,6 +19,8 @@ class LoginController extends GetxController {
 
   var user = UserModel().obs;
 
+  var mapUser = {};
+
   final box = GetStorage();
 
   UserCredential? userCredential;
@@ -24,14 +29,17 @@ class LoginController extends GetxController {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   Future<void> firstInitialize() async {
+    // var dataUser = [];
     await autoLogin().then((value) {
       if (value) {
         isAuth.value = true;
+        if (box.read(AppConstant.BOX_AUTO_LOGIN) != null) {
+          isAuth.value = box.read(AppConstant.BOX_AUTO_LOGIN);
+        }
       }
     });
-    if (box.read("users")) {
-      user = box.read("users");
-      print(user);
+    if (box.read(AppConstant.BOX_ADD_USER) != null) {
+      mapUser = box.read(AppConstant.BOX_ADD_USER);
     }
   }
 
@@ -51,7 +59,8 @@ class LoginController extends GetxController {
             .signInWithCredential(credential)
             .then((value) => userCredential = value);
 
-        CollectionReference users = firestore.collection("users");
+        CollectionReference users =
+            firestore.collection(AppConstant.COLLECTION_USER);
         final currUser = await users.doc(_currentUser!.email).get();
         final currentUserData = currUser.data() as Map<String, dynamic>;
 
@@ -71,6 +80,7 @@ class LoginController extends GetxController {
 
   Future<void> login() async {
     try {
+      isAuth.value = false;
       isLoading.value = true;
       await _googleSignIn.signOut();
       await _googleSignIn.signIn().then((value) => _currentUser = value);
@@ -88,10 +98,12 @@ class LoginController extends GetxController {
         await _firebaseAuth
             .signInWithCredential(credential)
             .then((value) => userCredential = value);
-        CollectionReference users = await firestore.collection("users");
+        CollectionReference users =
+            await firestore.collection(AppConstant.COLLECTION_USER);
         final checkUser = await users.doc(_currentUser!.email).get();
 
         if (checkUser.data() == null) {
+          //add or set to firebase
           await users.doc(_currentUser!.email).set(
             {
               "uid": userCredential!.user!.uid,
@@ -107,22 +119,21 @@ class LoginController extends GetxController {
             },
           );
         } else {
-          // await users.doc(_currentUser!.email).update({
-          //   "lastSignInTime": userCredential!.user!.metadata.lastSignInTime!
-          //       .toIso8601String(),
-          // });
+          print("data else ${box.read(AppConstant.BOX_AUTO_LOGIN)}");
+
           print("Something wrong else");
         }
         final currUser = await users.doc(_currentUser!.email).get();
 
         final currentUserData = currUser.data() as Map<String, dynamic>;
 
-        user(UserModel.fromJson(currentUserData));
+        user(UserModel.fromJson(jsonDecode(jsonEncode(currentUserData))));
 
-        box.write("user", user);
-
+        box.write(AppConstant.BOX_ADD_USER, user);
         user.refresh();
+
         isAuth.value = true;
+        box.write(AppConstant.BOX_AUTO_LOGIN, true);
 
         isLoading.value = false;
         update();

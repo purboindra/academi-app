@@ -1,4 +1,5 @@
 import 'package:academiapp/app/modules/login/controllers/login_controller.dart';
+import 'package:academiapp/app/routes/app_pages.dart';
 import 'package:academiapp/app/theme/app_theme.dart';
 import 'package:academiapp/app/theme/dimensions.dart';
 import 'package:academiapp/app/widgets/input_field.dart';
@@ -12,13 +13,21 @@ import '../controllers/add_schedule_controller.dart';
 class AddScheduleView extends GetView<AddScheduleController> {
   @override
   Widget build(BuildContext context) {
+    var params = Get.parameters;
+
+    int? index;
+
     final loginC = Get.find<LoginController>();
 
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.back();
+            if (params["page"] == "fromHomeVie") {
+              Get.offAllNamed(Routes.MAIN);
+            } else {
+              Get.back();
+            }
           },
           icon: Icon(Icons.chevron_left, color: Colors.black),
         ),
@@ -35,40 +44,38 @@ class AddScheduleView extends GetView<AddScheduleController> {
             child: Column(
               children: [
                 MyInputField(
+                  // widget: Container(
+                  //   width: 30,
+                  //   height: 30,
+                  //   color: Colors.red,
+                  // ),
                   controller: controller.courseController,
                   title: "Course",
                   hint: "Add course",
-                  widget: Icon(
-                    Icons.menu,
-                  ),
                 ),
                 MyInputField(
                   controller: controller.classCourseController,
                   title: "Class",
                   hint: "Add class",
-                  widget: Icon(
-                    Icons.menu,
-                  ),
                 ),
                 MyInputField(
                   controller: controller.descriptionController,
                   title: "Description",
                   hint: "Add description",
-                  widget: Icon(
-                    Icons.description,
-                  ),
                 ),
                 Obx(() => MyInputField(
+                      onTap: () {
+                        controller.getDateFromUser(context);
+                      },
                       title: "Date",
                       hint: DateFormat.yMd()
-                          .format(controller.selectedDate.value)
-                          .toString(),
+                          .format(controller.selectedDate.value),
                       widget: IconButton(
                         onPressed: () {
                           controller.getDateFromUser(context);
                         },
                         icon: Icon(
-                          Icons.house_outlined,
+                          Icons.calendar_month,
                         ),
                       ),
                     )),
@@ -76,6 +83,9 @@ class AddScheduleView extends GetView<AddScheduleController> {
                       children: [
                         Expanded(
                           child: MyInputField(
+                            onTap: () {
+                              controller.chooseTime(context, true);
+                            },
                             title: "Start",
                             hint: "${controller.startTime.value.toString()}",
                             widget: IconButton(
@@ -93,6 +103,9 @@ class AddScheduleView extends GetView<AddScheduleController> {
                         ),
                         Expanded(
                           child: MyInputField(
+                            onTap: () {
+                              controller.chooseTime(context, false);
+                            },
                             title: "End",
                             hint: "${controller.endTime.value.toString()}",
                             widget: IconButton(

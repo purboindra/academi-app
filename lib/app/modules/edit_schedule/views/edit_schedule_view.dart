@@ -16,7 +16,8 @@ class EditScheduleView extends GetView<EditScheduleController> {
   @override
   Widget build(BuildContext context) {
     var arguments = Get.arguments;
-    var params = Get.parameters;
+    // var params = Get.parameters;
+    print(arguments["endTime"]);
 
     // print(params["course"]);
     final loginC = Get.find<LoginController>();
@@ -43,6 +44,9 @@ class EditScheduleView extends GetView<EditScheduleController> {
             stream: Get.find<HomeController>().scheduleStream(emailUser),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
+                var snp = snapshot.data;
+                print("snap shot ${snp}");
+
                 return Center(
                   child: CircularProgressIndicator(),
                 );
@@ -56,146 +60,147 @@ class EditScheduleView extends GetView<EditScheduleController> {
                 // var snp = snapshot.data!;
 
                 return SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      MyInputField(
-                        controller:
-                            // Get.find<AddScheduleController>().courseController,
-                            controller.courseController,
-                        title: "Course",
-                        hint: "${arguments["course"]}",
-                        widget: Icon(
-                          Icons.menu,
+                  child: SafeArea(
+                    child: Column(
+                      children: [
+                        MyInputField(
+                          controller: controller.courseController,
+                          title: "Course",
+                          hint: "${arguments["course"]}",
                         ),
-                      ),
-                      MyInputField(
-                        controller: controller.classCourseController,
-                        // controller: Get.find<AddScheduleController>()
-                        //     .classCourseController,
-                        title: "Class",
-                        hint: "${arguments["classCourse"]}",
-                        widget: Icon(
-                          Icons.menu,
+                        MyInputField(
+                          controller: controller.classCourseController,
+                          title: "Class",
+                          hint: "${arguments["classCourse"]}",
                         ),
-                      ),
-                      MyInputField(
-                        controller: controller.descriptionController,
-                        title: "Description",
-                        hint: "${arguments["descriptionCourse"]}",
-                        widget: Icon(
-                          Icons.description,
+                        MyInputField(
+                          controller: controller.descriptionController,
+                          title: "Description",
+                          hint: "${arguments["descriptionCourse"]}",
                         ),
-                      ),
-                      Obx(() => MyInputField(
-                            title: "Date",
-                            hint: DateFormat.yMd()
-                                .format(controller.selectedDate.value)
-                                .toString(),
-                            widget: IconButton(
-                              onPressed: () {
-                                controller.getDateFromUser(context);
-                              },
-                              icon: Icon(
-                                Icons.house_outlined,
+                        Obx(() => MyInputField(
+                              onTap: () => controller.getDateFromUser(context),
+                              title: "Date",
+                              hint: DateFormat.yMd()
+                                  .format(controller.selectedDate.value)
+                                  .toString(),
+                              widget: IconButton(
+                                onPressed: () {
+                                  controller.getDateFromUser(context);
+                                },
+                                icon: Icon(
+                                  Icons.house_outlined,
+                                ),
                               ),
-                            ),
-                          )),
-                      Obx(() => Row(
-                            children: [
-                              Expanded(
-                                child: MyInputField(
-                                  title: "Start",
-                                  hint:
-                                      "${controller.startTime.value.toString()}",
-                                  widget: IconButton(
-                                    onPressed: () {
+                            )),
+                        Obx(() => Row(
+                              children: [
+                                Expanded(
+                                  child: MyInputField(
+                                    onTap: () {
                                       controller.chooseTime(context, true);
                                     },
-                                    icon: Icon(
-                                      Icons.hourglass_top,
+                                    title: "Start",
+                                    hint:
+                                        "${controller.startTime.value.toString()}",
+                                    widget: IconButton(
+                                      onPressed: () =>
+                                          controller.chooseTime(context, true),
+                                      icon: Icon(
+                                        Icons.hourglass_top,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: Dimensions.w20,
-                              ),
-                              Expanded(
-                                child: MyInputField(
-                                  title: "End",
-                                  hint: controller.endTime.value == ""
-                                      ? "${controller.endTime.value.toString()}"
-                                      : arguments["endTime"],
-                                  widget: IconButton(
-                                    onPressed: () {
-                                      controller.chooseTime(context, false);
-                                    },
-                                    icon: Icon(
-                                      Icons.hourglass_bottom,
+                                SizedBox(
+                                  width: Dimensions.w20,
+                                ),
+                                Expanded(
+                                  child: MyInputField(
+                                    onTap: () =>
+                                        controller.chooseTime(context, false),
+                                    title: "End",
+                                    hint: controller.endTime.value != ''
+                                        ? "${controller.endTime.value.toString()}"
+                                        : "${arguments["endTime"]}",
+                                    widget: IconButton(
+                                      onPressed: () {
+                                        controller.chooseTime(context, false);
+                                        // print("${arguments["endTime"]}");
+                                      },
+                                      icon: Icon(
+                                        Icons.hourglass_bottom,
+                                      ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            )),
+                        Obx(
+                          () => MyInputField(
+                            title: "Status",
+                            hint: '${controller.selectedStatus.value}',
+                            widget: Container(
+                              margin: EdgeInsets.only(
+                                right: Dimensions.w30,
                               ),
-                            ],
-                          )),
-                      Obx(
-                        () => MyInputField(
-                          title: "Status",
-                          hint: '${controller.selectedStatus.value}',
-                          widget: DropdownButton(
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.grey,
+                              child: DropdownButton(
+                                // disabledHint: Text("datadata"),
+                                // hint: Text("data"),
+                                elevation: 1,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.grey,
+                                ),
+                                iconSize: 32,
+                                style: subTitleStyle,
+                                underline: Container(
+                                  height: 0,
+                                ),
+                                items: controller.statusList
+                                    .map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                      value: value.toString(),
+                                      child: Text(value.toString()));
+                                }).toList(),
+                                onChanged: (String? newVal) {
+                                  controller.selectedStatus.value = newVal!;
+                                },
+                              ),
                             ),
-                            iconSize: 32,
-                            style: subTitleStyle,
-                            underline: Container(
-                              height: 0,
-                            ),
-                            items: controller.statusList
-                                .map<DropdownMenuItem<String>>((value) {
-                              return DropdownMenuItem<String>(
-                                  value: value.toString(),
-                                  child: Text(value.toString()));
-                            }).toList(),
-                            onChanged: (String? newVal) {
-                              controller.selectedStatus.value = newVal!;
-                            },
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: Dimensions.h30 * 1.8,
-                      ),
-                      Obx(() => ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.w10),
+                        SizedBox(
+                          height: Dimensions.h30 * 1.5,
+                        ),
+                        Obx(() => ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(Dimensions.w10),
+                                ),
+                                primary: primaryColor,
+                                padding: EdgeInsets.all(
+                                  Dimensions.w20,
+                                ),
+                                minimumSize: Size(
+                                  Dimensions.w,
+                                  Dimensions.h30,
+                                ),
                               ),
-                              primary: primaryColor,
-                              padding: EdgeInsets.all(
-                                Dimensions.w20,
+                              onPressed: () {
+                                controller.updateSchedule(
+                                    emailUser, arguments["id"]);
+                              },
+                              child: Text(
+                                loginC.isLoading.isFalse ? "Save" : "Loading",
+                                style: titleStyle.copyWith(
+                                  color: Colors.white,
+                                ),
                               ),
-                              minimumSize: Size(
-                                Dimensions.w,
-                                Dimensions.h30,
-                              ),
-                            ),
-                            onPressed: () {
-                              controller.updateSchedule(
-                                  emailUser, arguments["id"]);
-                            },
-                            child: Text(
-                              loginC.isLoading.isFalse
-                                  ? "Edit Schedule"
-                                  : "Loading",
-                              style: titleStyle.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                          )),
-                    ],
+                            )),
+                      ],
+                    ),
                   ),
                 );
               } else {

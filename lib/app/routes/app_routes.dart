@@ -9,6 +9,8 @@ abstract class Routes {
   static const MAIN = _Paths.MAIN;
   static const DETAIL_SCHEDULE = _Paths.DETAIL_SCHEDULE;
   static const EDIT_SCHEDULE = _Paths.EDIT_SCHEDULE;
+  static const ALL_SCHEDULE = _Paths.ALL_SCHEDULE;
+  static const COBA = _Paths.COBA;
 }
 
 abstract class _Paths {
@@ -19,4 +21,6 @@ abstract class _Paths {
   static const MAIN = '/main';
   static const DETAIL_SCHEDULE = '/detail-schedule';
   static const EDIT_SCHEDULE = '/edit-schedule';
+  static const ALL_SCHEDULE = '/all-schedule';
+  static const COBA = '/coba';
 }

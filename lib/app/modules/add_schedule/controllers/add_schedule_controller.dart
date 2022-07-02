@@ -2,34 +2,39 @@ import 'dart:convert';
 
 import 'package:academiapp/app/model/schedule_model.dart';
 import 'package:academiapp/app/model/user_model.dart';
+import 'package:academiapp/app/modules/login/controllers/login_controller.dart';
+import 'package:academiapp/app/utils/app_constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
 class AddScheduleController extends GetxController {
   var selectedDate = DateTime.now().obs;
 
-  // DateTime get selectedDate => _selectedDate.value;
+  final box = GetStorage();
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   RxList<ScheduleModel> listOfSchedule = <ScheduleModel>[].obs;
 
   var selectedStatus = "Undone".obs;
+
   List<String> statusList = [
     "Undone",
     "Done",
   ].obs;
 
-  var scheduleModel = ScheduleModel().obs;
+  var scheduleM = ScheduleModel().obs;
 
   var user = UserModel().obs;
 
   var isLoading = false.obs;
 
-  var startTime = DateFormat("hh:mm:a").format(DateTime.now()).obs;
+  var startTime = DateFormat("hh:mm a").format(DateTime.now()).obs;
 
-  var endTime = DateFormat("hh:mm:a").format(DateTime.now()).obs;
+  var endTime = DateFormat("hh:mm a").format(DateTime.now()).obs;
 
   var courseController = TextEditingController();
   var classCourseController = TextEditingController();
@@ -45,9 +50,9 @@ class AddScheduleController extends GetxController {
       lastDate: DateTime(2122),
     );
 
-    var parseSelectedDate =
+    String parseSelectedDate =
         DateFormat('EEE, MMM d ' 'yyyy').format(selectedDate.value);
-    var pickerParse =
+    String pickerParse =
         DateFormat('EEE, MMM d ' 'yyyy').format(pickerDate ?? DateTime.now());
     if (pickerDate != null) {
       pickerParse;
@@ -66,40 +71,34 @@ class AddScheduleController extends GetxController {
       initialEntryMode: TimePickerEntryMode.input,
     );
 
-    var timeData = timeOfDay!.format(context).obs;
-    if (isStartedTime == true) {
-      startTime.value = timeData.value;
-    } else {
-      endTime.value = timeData.value;
+    if (timeOfDay != null) {
+      var timeData = timeOfDay.format(context).obs;
+      if (isStartedTime == true) {
+        startTime.value = timeData.value;
+      } else {
+        endTime.value = timeData.value;
+      }
     }
   }
 
-  void addSchedule(String email) async {
-    isLoading.value = true;
-
+  Future<void> addSchedule(String email) async {
     if (courseController.text == "" || classCourseController.text == "") {
       Get.snackbar("Oops...", "Please add course or class first");
     } else {
+      isLoading.value = true;
       final index = await firestore
-          .collection("users")
+          .collection(AppConstant.COLLECTION_USER)
           .doc(email)
-          .collection("schedule")
+          .collection(AppConstant.COLLECTION_SCHEDULE)
           .doc();
 
       await firestore
-          .collection("users")
+          .collection(AppConstant.COLLECTION_USER)
           .doc(email)
-          .collection("schedule")
-          .doc(index.id);
-
-      print("index ${index.id}");
-
-      await firestore
-          .collection("users")
-          .doc(email)
-          .collection("schedule")
+          .collection(AppConstant.COLLECTION_SCHEDULE)
           .doc(index.id)
           .set({
+        // "indexSchedule": indexSchedule,
         "id": index.id,
         "course": courseController.text,
         "classCourse": classCourseController.text,
@@ -112,59 +111,50 @@ class AddScheduleController extends GetxController {
         "status": selectedStatus.value,
       });
 
-      // await firestore.collection("users").doc(email).collection("schedule").add(
-      //   {
-      //     // "id": id,
-      //     "course": courseController.text,
-      //     "classCourse": classCourseController.text,
-      //     "descriptionCourse": descriptionController.text,
-      //     "date": pickerDate != null
-      //         ? DateFormat('EEE, MMM d ' 'yyyy').format(pickerDate!)
-      //         : DateFormat('EEE, MMM d ' 'yyyy').format(selectedDate.value),
-      //     "startTime": startTime.value.toString(),
-      //     "endTime": endTime.value.toString(),
-      //     "status": selectedStatus.value,
-      //   },
-      // );
+      final scheduleData = firestore
+          .collection(AppConstant.COLLECTION_USER)
+          .doc(email)
+          .collection(AppConstant.COLLECTION_SCHEDULE)
+          .doc(index.id);
 
-      CollectionReference users = await firestore.collection("users");
+      print("prev ${listOfSchedule.length}");
 
-      final listSchedule = await users.doc(email).collection("schedule").get();
-
-      if (listSchedule.docs.length != 0) {
+      if (scheduleData != 0) {
         listOfSchedule = <ScheduleModel>[].obs;
-        listSchedule.docs.forEach((element) {
-          var dataDocumentSchedule = element.data();
-          var dataDocumentScheduleId = element.id;
-
+        final schedule = await firestore
+            .collection(AppConstant.COLLECTION_USER)
+            .doc(email)
+            .collection(AppConstant.COLLECTION_SCHEDULE)
+            .get();
+        schedule.docs.forEach((element) {
+          Map<String, dynamic> dataDocument = element.data();
+          String dataDocumentId = element.id;
           listOfSchedule.add(
             ScheduleModel(
-              id: dataDocumentScheduleId,
-              course: dataDocumentSchedule["course"],
-              classCourse: dataDocumentSchedule["classCourse"],
-              date: dataDocumentSchedule["date"],
-              startTime: dataDocumentSchedule["startTime"],
-              endTime: dataDocumentSchedule["endTime"],
-              status: dataDocumentSchedule["status"],
+              id: dataDocumentId,
+              course: dataDocument["course"],
+              classCourse: dataDocument["classCourse"],
+              date: dataDocument["date"],
+              startTime: dataDocument["startTime"],
+              endTime: dataDocument["endTime"],
+              status: dataDocument["status"],
             ),
           );
         });
+        box.write(AppConstant.BOX_ADD_SCHEDULE, listOfSchedule);
+      }
 
-        listOfSchedule.refresh();
+      listOfSchedule.refresh();
 
-        update();
-        isLoading.value = false;
+      print("current ${listOfSchedule.length}");
+      update();
+      isLoading.value = false;
 
-        if (isLoading.value == false) {
-          Get.rawSnackbar(
-            message: "Added course",
-            backgroundColor: Colors.green.shade500,
-          );
-        }
-      } else {
-        user.update((val) {
-          val!.scheduleModel;
-        });
+      if (isLoading.value == false) {
+        Get.rawSnackbar(
+          message: "Added course",
+          backgroundColor: Colors.green.shade500,
+        );
       }
     }
   }

@@ -17,6 +17,13 @@ dependencies:
   carousel_slider: 4.1.1
   intl: 0.17.0
   get_storage: 2.0.3
+  date_picker_timeline: 1.2.3
+  flutter_local_notifications: 9.6.1
+  flutter_native_timezone: 2.0.0
+  animated_bottom_navigation_bar: 1.0.0
+  device_info: 2.0.3
+  rxdart: 0.27.4
+  image: 3.2.0
   flutter: 
     sdk: flutter
 

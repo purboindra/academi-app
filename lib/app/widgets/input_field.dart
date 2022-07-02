@@ -7,11 +7,13 @@ class MyInputField extends StatelessWidget {
   final String title, hint;
   final TextEditingController? controller;
   final Widget? widget;
+  final void Function()? onTap;
   const MyInputField({
     Key? key,
     required this.title,
     required this.hint,
     this.widget,
+    this.onTap,
     this.controller,
   }) : super(key: key);
 
@@ -35,14 +37,19 @@ class MyInputField extends StatelessWidget {
             height: 10,
           ),
           TextField(
-            // readOnly: widget == null ? false : true,
+            onTap: onTap,
+            readOnly: widget == null ? false : true,
             autocorrect: false,
             controller: controller,
             cursorColor:
                 Get.isDarkMode ? Colors.grey.shade100 : Colors.grey.shade700,
             decoration: InputDecoration(
-              prefixIcon: widget,
-              prefixIconColor: greyColor,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: Dimensions.w10,
+                vertical: Dimensions.h15,
+              ),
+              suffixIcon: widget,
+              suffixIconColor: greyColor,
               iconColor: primaryColor,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(Dimensions.w10 - 3),

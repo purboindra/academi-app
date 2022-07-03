@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
     //                   theme: ThemeData.light(),
     //                   debugShowCheckedModeBanner: false,
     //                   initialRoute: loginController.isAuth.value == true
-    //                       ? Routes.COBA
+    //                       ? Routes.MAIN
     //                       : Routes.LOGIN,
     //                   // home: AllScheduleView(),
     //                   getPages: AppPages.routes,

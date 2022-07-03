@@ -1,3 +1,4 @@
+import 'package:academiapp/app/model/schedule_model.dart';
 import 'package:academiapp/app/modules/login/controllers/login_controller.dart';
 import 'package:academiapp/app/routes/app_pages.dart';
 import 'package:academiapp/app/theme/app_theme.dart';
@@ -31,12 +32,22 @@ class MainView extends GetView<MainController> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () async {
+          ScheduleModel? scheduleModel;
           // box.remove(AppConstant.BOX_ADD_SCHEDULE);
-          Get.toNamed(
-            Routes.ADD_SCHEDULE,
-            parameters: {
-              "page": "fromHomeVie",
-            },
+          // Get.toNamed(
+          //   Routes.ADD_SCHEDULE,
+          //   parameters: {
+          //     "page": "fromHomeVie",
+          //   },
+          // );
+
+          // await notifyHelper.zonedScheduleNotification();
+
+          // await notifyHelper.scheduleDailyTenAMNotification();
+          await notifyHelper.showNotification(
+            title: "Purbo",
+            body: "Hello Purbo Indra",
+            payload: "prubo.abs",
           );
 
           // await notifyHelper.displayNotification(

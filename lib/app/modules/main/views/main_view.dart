@@ -32,7 +32,6 @@ class MainView extends GetView<MainController> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         onPressed: () async {
-          ScheduleModel? scheduleModel;
           // box.remove(AppConstant.BOX_ADD_SCHEDULE);
           // Get.toNamed(
           //   Routes.ADD_SCHEDULE,

@@ -14,9 +14,6 @@ class AddScheduleView extends GetView<AddScheduleController> {
   @override
   Widget build(BuildContext context) {
     var params = Get.parameters;
-
-    int? index;
-
     final loginC = Get.find<LoginController>();
 
     return Scaffold(
@@ -44,11 +41,6 @@ class AddScheduleView extends GetView<AddScheduleController> {
             child: Column(
               children: [
                 MyInputField(
-                  // widget: Container(
-                  //   width: 30,
-                  //   height: 30,
-                  //   color: Colors.red,
-                  // ),
                   controller: controller.courseController,
                   title: "Course",
                   hint: "Add course",

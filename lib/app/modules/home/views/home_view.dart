@@ -103,38 +103,6 @@ class HomeView extends GetView<HomeController> {
                     ),
                     _scheduleList(),
 
-                    // Wrap(
-                    //   spacing: 10,
-                    //   runSpacing: 10,
-                    //   children: List.generate(
-                    //     8,
-                    //     (index) => Container(
-                    //       height: 130,
-                    //       width: 70,
-                    //       // color: Colors.blue,
-                    //       child: Column(
-                    //         children: [
-                    //           Container(
-                    //             width: 70,
-                    //             height: 70,
-                    //             color: Colors.red,
-                    //           ),
-                    //           SizedBox(
-                    //             height: 10,
-                    //           ),
-                    //           Text(
-                    //             "data data data data",
-                    //             textAlign: TextAlign.center,
-                    //             style: titleStyle,
-                    //             overflow: TextOverflow.ellipsis,
-                    //             maxLines: 2,
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-
                     // SizedBox(
                     //   height: Dimensions.h10,
                     // ),
@@ -144,12 +112,13 @@ class HomeView extends GetView<HomeController> {
                     //       3,
                     //       (index) => CheckboxListTile(
                     //         title: Text(controller.names[index]),
-                    //         value: controller.check.value == index ? true : false,
+                    //         value:
+                    //             controller.check.value == index ? true : false,
                     //         // value: controller.isSelec.value,
                     //         onChanged: (check) {
                     //           // controller.checkBox(index).value;
-                    //           controller.addCheck(index);
-                    //           // controller.checkBox(index).refresh();
+                    //           // controller.addCheck(index);
+                    //           controller.checkBox(index).refresh();
                     //           print(controller.names);
                     //           // print(value);
                     //           // controller.isSelec.value = check!;

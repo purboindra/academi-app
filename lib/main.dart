@@ -51,6 +51,7 @@ class MyApp extends StatelessWidget {
     loginController.firstInitialize();
 
     return GetMaterialApp(
+      debugShowCheckedModeBanner: false,
       home: CobaView(),
     );
     // return FutureBuilder(

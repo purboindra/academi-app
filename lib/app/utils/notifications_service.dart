@@ -1,5 +1,3 @@
-import 'package:academiapp/app/model/schedule_model.dart';
-import 'package:academiapp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -15,17 +13,6 @@ class NotificationService {
 
   final onNotifications = BehaviorSubject<String?>();
 
-  Future _notificationsDetail() async {
-    return NotificationDetails(
-        android: AndroidNotificationDetails(
-          "channel id",
-          "channel name",
-          channelDescription: "channel description",
-          importance: Importance.max,
-        ),
-        iOS: IOSNotificationDetails());
-  }
-
   Future init({
     bool initScheduled = false,
   }) async {
@@ -40,6 +27,17 @@ class NotificationService {
         onSelectNotification: (payload) async {
       onNotifications.add(payload);
     });
+  }
+
+  Future _notificationsDetail() async {
+    return NotificationDetails(
+        android: AndroidNotificationDetails(
+          "channel id",
+          "channel name",
+          channelDescription: "channel description",
+          importance: Importance.max,
+        ),
+        iOS: IOSNotificationDetails());
   }
 
   Future showNotification({

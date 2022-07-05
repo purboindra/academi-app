@@ -19,17 +19,17 @@ class HomeController extends GetxController {
 
   RxInt check = 10.obs;
 
-  void addCheck(int index) {
-    if (checkBox(index).value) {
-      index++;
-      names.forEach((element) {
-        print(element);
-      });
-    } else {
-      print("index $index");
-      print("NOT");
-    }
-  }
+  // void addCheck(int index) {
+  //   if (checkBox(index).value) {
+  //     index++;
+  //     names.forEach((element) {
+  //       print(element);
+  //     });
+  //   } else {
+  //     print("index $index");
+  //     print("NOT");
+  //   }
+  // }
 
   RxBool checkBox(int index) {
     check.value = index;

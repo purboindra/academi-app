@@ -9,6 +9,7 @@ import '../controllers/coba_controller.dart';
 class CobaView extends GetView<CobaController> {
   @override
   Widget build(BuildContext context) {
+    Get.put(CobaController());
     return Scaffold(
       body: Column(
         children: [
@@ -110,106 +111,217 @@ class CobaView extends GetView<CobaController> {
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 40,
-                  ),
-                  Column(
-                    children: [
-                      Row(
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Column(
                         children: [
-                          Icon(
-                            Icons.card_membership,
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.card_membership,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                "Data Member",
+                                style: titleStyle.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
-                            width: 10,
+                            height: 20,
                           ),
-                          Text(
-                            "Data Member",
-                            style: titleStyle.copyWith(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                          Obx(() => FieldData(
+                                // index: controller.indexField.value,
+                                suffixText: "Masukan Kata Sandi",
+                                prefixText: "Kata Sandi",
+                                icon: InkWell(
+                                  onTap: () {
+                                    controller.obsecureTextKataSandi.value =
+                                        !controller.obsecureTextKataSandi.value;
+                                  },
+                                  child: Icon(
+                                    controller.obsecureTextKataSandi.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                              )),
+                          Obx(() => FieldData(
+                                suffixText: "Masukan Ulang Kata Sandi",
+                                prefixText: "Konfirmasi Kata Sandi",
+                                icon: InkWell(
+                                  onTap: () {
+                                    controller.obsecureTextKonfirmKataSandi
+                                            .value =
+                                        !controller
+                                            .obsecureTextKonfirmKataSandi.value;
+                                  },
+                                  child: Icon(
+                                    controller
+                                            .obsecureTextKonfirmKataSandi.value
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
+                              )),
+                          FieldData(
+                            suffixText: "Masukan Nama Anda",
+                            prefixText: "Nama Lengkap",
+                          ),
+                          FieldData(
+                            suffixText: "No.Identitas",
+                            prefixText: "Pilih Identitas",
+                            icon: Icon(
+                              Icons.chevron_right,
+                            ),
+                            readOnly: true,
+                          ),
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: "Masukan No. Identitas Anda (16 digit)",
+                              hintStyle: subTitleStyle.copyWith(
+                                color: Colors.grey.shade500,
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Kata Sandi",
-                        prefixText: "Kata Sandi",
-                        prefixIcon: Icons.visibility,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Ulang Kata Sandi",
-                        prefixText: "Konfirmasi Kata Sandi",
-                        prefixIcon: Icons.visibility,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Nama Anda",
-                        prefixText: "Nama Lengkap",
-                      ),
-                      FieldData(
-                        suffixText: "No.Identitas",
-                        prefixText: "Pilih Identitas",
-                        prefixIcon: Icons.chevron_right,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                          hintText: "Masukan No. Identitas Anda (16 digit)",
-                          hintStyle: subTitleStyle.copyWith(
-                            color: Colors.grey.shade500,
+                          SizedBox(
+                            height: 30,
                           ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Tempat Lahir Anda",
-                        prefixText: "Tempat Lahir",
-                      ),
-                      FieldData(
-                        suffixText: "Pilih Jenis Kelamin",
-                        prefixText: "Jenis Kelamin",
-                        prefixIcon: Icons.chevron_right,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Alamat Anda",
-                        prefixText: "Alamat",
-                      ),
-                      FieldData(
-                        suffixText: "Pilih Provinsi",
-                        prefixText: "Provinsi",
-                        prefixIcon: Icons.chevron_right,
-                      ),
-                      FieldData(
-                        suffixText: "Pilih Kota/Kabupaten",
-                        prefixText: "Kota/Kabupaten",
-                        prefixIcon: Icons.chevron_right,
-                      ),
-                      FieldData(
-                        suffixText: "Pilih Kecamatan",
-                        prefixText: "Kecamatan",
-                        prefixIcon: Icons.chevron_right,
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Nama Kelurahan Anda",
-                        prefixText: "Keluaran",
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Kode Pos",
-                        prefixText: "Kode Pos",
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Nomor HP Anda",
-                        prefixText: "No. Hp",
-                      ),
-                      FieldData(
-                        suffixText: "Masukan Email Anda",
-                        prefixText: "Email",
+                          FieldData(
+                            suffixText: "Masukan Tempat Lahir Anda",
+                            prefixText: "Tempat Lahir",
+                          ),
+                          FieldData(
+                            readOnly: true,
+                            suffixText: "",
+                            prefixText: "Jenis Kelamin",
+                            icon: DropdownButton(
+                                hint: Text(
+                                  "Pilih Jenis Kelamin",
+                                  style: subTitleStyle.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                isDense: true,
+                                icon: Icon(
+                                  Icons.chevron_right,
+                                ),
+                                items: controller.itemJenisKelamin
+                                    .map<DropdownMenuItem<String>>((items) {
+                                  return DropdownMenuItem<String>(
+                                      value: items.toString(),
+                                      child: Text(items));
+                                }).toList(),
+                                onChanged: (value) {
+                                  print(value);
+                                }),
+                          ),
+                          FieldData(
+                            suffixText: "Masukan Alamat Anda",
+                            prefixText: "Alamat",
+                          ),
+                          FieldData(
+                            suffixText: "",
+                            prefixText: "Provinsi",
+                            icon: DropdownButton(
+                                hint: Text(
+                                  "Pilih Jenis Kelamin",
+                                  style: subTitleStyle.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                isDense: true,
+                                icon: Icon(
+                                  Icons.chevron_right,
+                                ),
+                                items: controller.itemJenisKelamin
+                                    .map<DropdownMenuItem<String>>((items) {
+                                  return DropdownMenuItem<String>(
+                                      value: items.toString(),
+                                      child: Text(items));
+                                }).toList(),
+                                onChanged: (value) {
+                                  print(value);
+                                }),
+                            readOnly: true,
+                          ),
+                          FieldData(
+                            suffixText: "",
+                            prefixText: "Kota/Kabupaten",
+                            icon: DropdownButton(
+                                hint: Text(
+                                  "Pilih Jenis Kelamin",
+                                  style: subTitleStyle.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                isDense: true,
+                                icon: Icon(
+                                  Icons.chevron_right,
+                                ),
+                                items: controller.itemJenisKelamin
+                                    .map<DropdownMenuItem<String>>((items) {
+                                  return DropdownMenuItem<String>(
+                                      value: items.toString(),
+                                      child: Text(items));
+                                }).toList(),
+                                onChanged: (value) {
+                                  print(value);
+                                }),
+                            readOnly: true,
+                          ),
+                          FieldData(
+                            suffixText: "",
+                            prefixText: "Kecamatan",
+                            icon: DropdownButton(
+                                hint: Text(
+                                  "Pilih Jenis Kelamin",
+                                  style: subTitleStyle.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+                                isDense: true,
+                                icon: Icon(
+                                  Icons.chevron_right,
+                                ),
+                                items: controller.itemJenisKelamin
+                                    .map<DropdownMenuItem<String>>((items) {
+                                  return DropdownMenuItem<String>(
+                                      value: items.toString(),
+                                      child: Text(items));
+                                }).toList(),
+                                onChanged: (value) {
+                                  print(value);
+                                }),
+                            readOnly: true,
+                          ),
+                          FieldData(
+                            suffixText: "Masukan Nama Kelurahan Anda",
+                            prefixText: "Keluaran",
+                          ),
+                          FieldData(
+                            suffixText: "Masukan Kode Pos",
+                            prefixText: "Kode Pos",
+                          ),
+                          FieldData(
+                            suffixText: "Masukan Nomor HP Anda",
+                            prefixText: "No. Hp",
+                          ),
+                          FieldData(
+                            suffixText: "Masukan Email Anda",
+                            prefixText: "Email",
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -223,34 +335,30 @@ class CobaView extends GetView<CobaController> {
   }
 }
 
-class FieldData extends StatefulWidget {
+class FieldData extends StatelessWidget {
+  final String suffixText;
+  final String prefixText;
+  final IconData? prefixIcon;
+  final Widget? icon;
+  final void Function()? onTap;
+  bool readOnly;
+
   FieldData({
     Key? key,
     required this.suffixText,
     required this.prefixText,
     this.prefixIcon,
+    this.icon,
+    this.onTap,
+    this.readOnly = false,
   }) : super(key: key);
-  final String suffixText;
-  final String prefixText;
-  final IconData? prefixIcon;
 
-  @override
-  State<FieldData> createState() => _FieldDataState();
-}
-
-class _FieldDataState extends State<FieldData> {
   @override
   Widget build(BuildContext context) {
-    String dropdownValue = 'Item 1';
-
-    List<String> listDropDown = [
-      "Item 1",
-      "Item 2",
-      "Item 3",
-    ];
+    final cobaC = Get.find<CobaController>();
     return Container(
       margin: EdgeInsets.only(
-        bottom: widget.suffixText == "No.Identitas" ? 10 : 30,
+        bottom: suffixText == "No.Identitas" ? 10 : 30,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -259,16 +367,17 @@ class _FieldDataState extends State<FieldData> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.prefixText,
+                prefixText,
                 style: subTitleStyle.copyWith(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                 ),
               ),
               Row(
+                // mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    widget.suffixText,
+                    suffixText,
                     style: subTitleStyle.copyWith(
                       fontSize: 12,
                       color: Colors.grey.shade500,
@@ -277,41 +386,25 @@ class _FieldDataState extends State<FieldData> {
                   SizedBox(
                     width: 5,
                   ),
-                  widget.prefixIcon != null
-                      ? Icon(
-                          widget.prefixIcon,
-                          size: 18,
-                        )
-                      : SizedBox(),
+                  icon != null ? icon! : SizedBox(),
                 ],
               ),
             ],
           ),
-          TextField(
-            onTap: () {
-              widget.prefixIcon == Icons.chevron_right
-                  ? DropdownButton<String>(
-                      value: dropdownValue,
-                      items: listDropDown
-                          .map<DropdownMenuItem<String>>((String value) {
-                        print(value);
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          print(newValue);
-                          dropdownValue = newValue!;
-                        });
-                      })
-                  : print("NOTHING");
-            },
-            readOnly: widget.prefixIcon == Icons.chevron_right ? true : false,
-            decoration: InputDecoration(
-              isCollapsed: true,
-              isDense: true,
+          SizedBox(
+            height: 5,
+          ),
+          Obx(
+            () => TextField(
+              onTap: onTap,
+              obscureText: prefixText == "Kata Sandi"
+                  ? cobaC.obsecureTextKataSandi.value
+                  : cobaC.obsecureTextKonfirmKataSandi.value,
+              readOnly: readOnly,
+              decoration: InputDecoration(
+                isCollapsed: true,
+                isDense: true,
+              ),
             ),
           ),
         ],
@@ -319,8 +412,6 @@ class _FieldDataState extends State<FieldData> {
     );
   }
 }
-
-
 //  SingleChildScrollView(
 //         child: Padding(
 //           padding: const EdgeInsets.symmetric(
